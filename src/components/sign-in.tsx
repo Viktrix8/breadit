@@ -7,10 +7,10 @@ import { toast } from "./ui/use-toast";
 
 type Props = {};
 
-export default function SignUp({}: Props) {
+export default function SignIn({}: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const signUpWithGoogle = async () => {
+  const signInWithGoogle = async () => {
     setIsLoading(true);
     try {
       const res = await signIn("google", {
@@ -18,7 +18,7 @@ export default function SignUp({}: Props) {
       });
 
       if (res?.error)
-        throw new Error("Failed to Sign Up using google, please try again.");
+        throw new Error("Failed to Sign In using google, please try again.");
     } catch (error: any) {
       toast({
         title: "Oops!",
@@ -31,12 +31,12 @@ export default function SignUp({}: Props) {
   };
   return (
     <Button
-      onClick={signUpWithGoogle}
+      onClick={signInWithGoogle}
       isLoading={isLoading}
       variant="outline"
       className="mt-2"
     >
-      <Icons.google className="w-4 h-4 mr-2" /> Sign Up With Google
+      <Icons.google className="w-4 h-4 mr-2" /> Sign In With Google
     </Button>
   );
 }

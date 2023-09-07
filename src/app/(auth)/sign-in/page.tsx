@@ -1,4 +1,4 @@
-import SignUp from "@/components/sign-up";
+import SignIn from "@/components/sign-in";
 import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -8,17 +8,16 @@ export default function page({}: Props) {
   return (
     <div className="items-center py-64">
       <div className="bg-white text-center w-fit mx-auto p-6 rounded">
-        <h2 className="font-bold text-xl tracking-wide">Welcome!</h2>
+        <h2 className="font-bold text-xl tracking-wide">Welcome Back!</h2>
         <p className="text-muted-foreground max-w-sm mx-auto text-center text-sm mb-3">
-          By continuing, you are setting up a Reddit account and agree to our
-          User Agreement and Privacy Policy.
+          By continuing you agree with our User Agreement and Privacy Policy.
         </p>
-        <SignUp />
+        <SignIn />
         <hr className="my-4" />
         <span className="text-sm text-muted-foreground">
-          Already have an account?
-          <Link href="/sign-in" className={buttonVariants({ variant: "link" })}>
-            Sign In
+          Don't have an account yet?
+          <Link href="/sign-up" className={buttonVariants({ variant: "link" })}>
+            Sign Up
           </Link>
         </span>
       </div>
