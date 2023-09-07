@@ -1,5 +1,5 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { AuthOptions } from "next-auth";
+import { AuthOptions, getServerSession } from "next-auth";
 import { Adapter } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
 import { prisma } from "@/lib/db";
@@ -25,28 +25,30 @@ export const authOptions: AuthOptions = {
       return session;
     },
     jwt: async ({ token, user }) => {
-      const dbUser = await prisma.user.findUnique({ where: { id: user.id } });
+      if (user) {
+        let dbUser = await prisma.user.findUnique({ where: { id: user.id } });
 
-      if (!dbUser) {
-        token.id = user.id;
-        return token;
+        if (!dbUser) {
+          token.id = user.id;
+          return token;
+        }
+
+        if (!dbUser.username) {
+          dbUser = await prisma.user.update({
+            where: {
+              id: dbUser.id,
+            },
+            data: {
+              username: nanoid(10),
+            },
+          });
+        }
+
+        token.id = dbUser.id;
+        token.username = dbUser.username;
+        token.email = dbUser.email;
+        token.picture = dbUser.image;
       }
-
-      if (!dbUser.username) {
-        await prisma.user.update({
-          where: {
-            id: dbUser.id,
-          },
-          data: {
-            username: nanoid(10),
-          },
-        });
-      }
-
-      token.id = dbUser?.id;
-      token.username = dbUser.username;
-      token.email = dbUser?.email;
-      token.picture = dbUser?.image;
 
       return token;
     },
@@ -55,3 +57,5 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
   },
 };
+
+export const getAuthSession = () => getServerSession(authOptions);

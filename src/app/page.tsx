@@ -2,7 +2,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { HomeIcon } from "lucide-react";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div>
       <h1 className="font-bold text-2xl mb-4">Your Feed</h1>
