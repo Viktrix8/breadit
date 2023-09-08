@@ -56,3 +56,8 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Subreddit {
+  id    String @id @default(cuid())
+  title String @unique
+}

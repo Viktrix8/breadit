@@ -4,6 +4,7 @@ import Navbar from "@/components/navbar";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
+import Providers from "@/components/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,10 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(inter.className, "bg-slate-100")}>
-        <Navbar />
-        <div className="container py-4">{children}</div>
-        <Toaster />
-        {authModal}
+        <Providers>
+          <Navbar />
+          <div className="container py-4">{children}</div>
+          <Toaster />
+          {authModal}
+        </Providers>
       </body>
     </html>
   );

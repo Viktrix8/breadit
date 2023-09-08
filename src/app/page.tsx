@@ -19,7 +19,7 @@ export default async function Home() {
           </p>
           <hr className="my-4" />
           <Link
-            href="/subreddit/create"
+            href="/r/create"
             className={buttonVariants({ className: "w-full" })}
           >
             Create Community
