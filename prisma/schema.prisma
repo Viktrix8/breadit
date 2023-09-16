@@ -6,8 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider     = "postgresql"
+  url          = env("DATABASE_URL")
+  relationMode = "foreignKeys"
 }
 
 model Account {
@@ -27,6 +28,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -35,6 +37,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
@@ -45,8 +49,10 @@ model User {
   image         String
   username      String?
 
-  accounts Account[]
-  sessions Session[]
+  accounts     Account[]
+  sessions     Session[]
+  Subscription Subscription[]
+  Subreddit    Subreddit[]
 }
 
 model VerificationToken {
@@ -60,4 +66,20 @@ model VerificationToken {
 model Subreddit {
   id    String @id @default(cuid())
   title String @unique
+
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
+
+  createdAt    DateTime       @default(now())
+  subscription Subscription[]
+}
+
+model Subscription {
+  userId      String
+  subredditId String
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subreddit Subreddit @relation(fields: [subredditId], references: [id], onDelete: Cascade)
+
+  @@id([userId, subredditId])
 }

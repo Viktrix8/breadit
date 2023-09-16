@@ -23,6 +23,14 @@ export const POST = async (req: Request) => {
     const subreddit = await prisma.subreddit.create({
       data: {
         title,
+        authorId: session.user.id,
+      },
+    });
+
+    await prisma.subscription.create({
+      data: {
+        subredditId: subreddit.id,
+        userId: session.user.id,
       },
     });
 
