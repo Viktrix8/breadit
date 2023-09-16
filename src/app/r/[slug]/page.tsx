@@ -1,3 +1,4 @@
+import SmallCreatePost from "@/components/small-create-post";
 import SubscribeToggle from "@/components/subscribe-toggle";
 import { getAuthSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
@@ -37,7 +38,15 @@ export default async function page({ params: { slug } }: Props) {
 
   return (
     <div className="grid grid-cols-3 gap-4">
-      <div className="col-span-2 bg-white">{/* TODO: Feed */}</div>
+      <div className="col-span-2">
+        {session && (
+          <SmallCreatePost
+            user={{ image: session.user.image, email: session.user.email }}
+            subredditTitle={subreddit.title}
+          />
+        )}
+        {/* TODO: Feed */}
+      </div>
       <div className="bg-white border p-4 rounded">
         <p className="flex items-center font-medium">
           <HelpCircle className="mr-2 w-4 h-4" />
