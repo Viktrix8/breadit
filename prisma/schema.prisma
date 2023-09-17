@@ -72,6 +72,7 @@ model Subreddit {
 
   createdAt    DateTime       @default(now())
   subscription Subscription[]
+  Posts        Post[]
 }
 
 model Subscription {
@@ -82,4 +83,13 @@ model Subscription {
   subreddit Subreddit @relation(fields: [subredditId], references: [id], onDelete: Cascade)
 
   @@id([userId, subredditId])
+}
+
+model Post {
+  id      String @id @default(cuid())
+  title   String
+  content String
+
+  subreddit   Subreddit @relation(fields: [subredditId], references: [id], onDelete: Cascade)
+  subredditId String
 }

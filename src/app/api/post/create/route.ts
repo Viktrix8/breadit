@@ -1,5 +1,5 @@
 import { getAuthSession } from "@/lib/auth";
-import { SubredditValidator } from "@/types/validators/subreddit";
+import { PostValidator } from "@/types/validators/post";
 import { prisma } from "@/lib/db";
 import { z } from "zod";
 
@@ -8,33 +8,27 @@ export const POST = async (req: Request) => {
 
   if (!session) return new Response("Not authorized.", { status: 401 });
   try {
-    const data = await req.json();
+    const body = await req.json();
+    const { subredditName, title, content } = PostValidator.parse(body);
 
-    const { title } = SubredditValidator.parse(data);
-
-    const subredditExists = await prisma.subreddit.findFirst({
+    const subreddit = await prisma.subreddit.findFirst({
       where: {
-        title,
+        title: subredditName,
       },
     });
 
-    if (subredditExists) return new Response("Invalid name.", { status: 409 });
+    if (!subreddit)
+      return new Response("Subreddit doesn't exist.", { status: 404 });
 
-    const subreddit = await prisma.subreddit.create({
+    const post = await prisma.post.create({
       data: {
+        content,
         title,
-        authorId: session.user.id,
-      },
-    });
-
-    await prisma.subscription.create({
-      data: {
         subredditId: subreddit.id,
-        userId: session.user.id,
       },
     });
 
-    return new Response(subreddit.id, { status: 200 });
+    return new Response(post.id, { status: 200 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       const errorMessages = error.errors.map((e) => e.message).join(", ");
