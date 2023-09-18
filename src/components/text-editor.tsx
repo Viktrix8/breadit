@@ -50,7 +50,7 @@ export default function TextEditor({ subredditName }: Props) {
               defaultStyle: "unordered",
             },
           },
-          codeTool: Code,
+          code: Code,
           quoteTool: Quote,
         },
         inlineToolbar: true,
@@ -82,6 +82,7 @@ export default function TextEditor({ subredditName }: Props) {
       });
 
       router.push(`/r/${subredditName}`);
+      router.refresh();
     },
     onError: (err) => {
       if (err instanceof AxiosError) {
@@ -133,7 +134,7 @@ export default function TextEditor({ subredditName }: Props) {
         <div id="editorjs" className="editorjs flex-1" />
         <Button
           type="submit"
-          disabled={!data?.blocks.length}
+          disabled={!data?.blocks.length || isLoading}
           isLoading={isLoading}
         >
           Post

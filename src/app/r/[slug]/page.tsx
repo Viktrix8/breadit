@@ -48,9 +48,9 @@ export default async function page({ params: { slug } }: Props) {
             subredditTitle={subreddit.title}
           />
         )}
-        <CommunityFeed />
+        <CommunityFeed subredditId={subreddit.id} />
       </div>
-      <div className="bg-white border p-4 rounded">
+      <div className="bg-white border h-fit p-4 rounded">
         <p className="flex items-center font-medium">
           <HelpCircle className="mr-2 w-4 h-4" />
           About r/{slug}
