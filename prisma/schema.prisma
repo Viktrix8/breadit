@@ -92,4 +92,6 @@ model Post {
 
   subreddit   Subreddit @relation(fields: [subredditId], references: [id], onDelete: Cascade)
   subredditId String
+
+  // TODO: Add other required fields
 }

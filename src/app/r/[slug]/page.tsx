@@ -1,8 +1,10 @@
 import SmallCreatePost from "@/components/small-create-post";
 import SubscribeToggle from "@/components/subscribe-toggle";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { getAuthSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { HelpCircle } from "lucide-react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -77,6 +79,15 @@ export default async function page({ params: { slug } }: Props) {
             subredditId={subreddit.id}
           />
         )}
+        <Link
+          href={`/r/${slug}/submit`}
+          className={buttonVariants({
+            variant: "secondary",
+            className: "w-full mt-2",
+          })}
+        >
+          Create Post
+        </Link>
       </div>
     </div>
   );

@@ -88,7 +88,7 @@ export default function TextEditor({ subredditName }: Props) {
         if (err.response?.status === 401) {
           return toast({
             title: "Oops!",
-            description: "You have to be signed in to create community.",
+            description: "You have to be signed in to create post.",
             variant: "destructive",
           });
         } else if (err.response?.status === 404) {
