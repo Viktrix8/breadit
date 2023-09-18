@@ -25,6 +25,7 @@ export const POST = async (req: Request) => {
         content,
         title,
         subredditId: subreddit.id,
+        authorId: session.user.id,
       },
     });
 

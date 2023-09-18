@@ -1,6 +1,7 @@
+import CommunityFeed from "@/components/community-feed";
 import SmallCreatePost from "@/components/small-create-post";
 import SubscribeToggle from "@/components/subscribe-toggle";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { getAuthSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { HelpCircle } from "lucide-react";
@@ -47,7 +48,7 @@ export default async function page({ params: { slug } }: Props) {
             subredditTitle={subreddit.title}
           />
         )}
-        {/* TODO: Feed */}
+        <CommunityFeed />
       </div>
       <div className="bg-white border p-4 rounded">
         <p className="flex items-center font-medium">
