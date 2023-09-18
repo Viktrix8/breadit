@@ -49,10 +49,12 @@ model User {
   image         String
   username      String?
 
-  accounts     Account[]
-  sessions     Session[]
-  Subscription Subscription[]
-  Subreddit    Subreddit[]
+  accounts Account[]
+  sessions Session[]
+
+  Subscriptions Subscription[]
+  Subreddits    Subreddit[]
+  Posts         Post[]
 }
 
 model VerificationToken {
@@ -90,8 +92,11 @@ model Post {
   title   String
   content String
 
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId String
+
   subreddit   Subreddit @relation(fields: [subredditId], references: [id], onDelete: Cascade)
   subredditId String
 
-  // TODO: Add other required fields
+  createdAt DateTime @default(now())
 }
