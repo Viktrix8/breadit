@@ -1,10 +1,16 @@
 import { prisma } from "@/lib/db";
 import Feed from "./feed";
+import { getAuthSession } from "@/lib/auth";
 
 type Props = {};
 
 export default async function HomeFeed({}: Props) {
+  const session = await getAuthSession();
+
   const postsFromSubscribedSubreddits = await prisma.subscription.findMany({
+    where: {
+      userId: session?.user.id,
+    },
     take: 10,
     select: {
       subreddit: {
