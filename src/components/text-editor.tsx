@@ -51,7 +51,7 @@ export default function TextEditor({ subredditName }: Props) {
             },
           },
           code: Code,
-          quoteTool: Quote,
+          quote: Quote,
         },
         inlineToolbar: true,
         placeholder: "Enter your content.",

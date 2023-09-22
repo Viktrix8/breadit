@@ -1,3 +1,4 @@
+import HomeFeed from "@/components/home-feed";
 import { buttonVariants } from "@/components/ui/button";
 import { HomeIcon } from "lucide-react";
 import Link from "next/link";
@@ -7,8 +8,10 @@ export default async function Home() {
     <div>
       <h1 className="font-bold text-2xl mb-4">Your Feed</h1>
       <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-2 bg-white">{/* TODO: Feed */}</div>
-        <div className="bg-white border p-4 rounded">
+        <div className="col-span-2">
+          <HomeFeed />
+        </div>
+        <div className="bg-white border p-4 rounded h-fit">
           <p className="flex items-center font-medium">
             <HomeIcon className="mr-2 w-4 h-4" />
             Home

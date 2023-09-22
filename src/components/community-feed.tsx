@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/db";
-
 import Feed from "./feed";
 
 type Props = {
@@ -17,6 +16,7 @@ export default async function CommunityFeed({ subredditId }: Props) {
     include: {
       author: true,
     },
+    take: 10,
   });
 
   return (
