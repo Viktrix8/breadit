@@ -3,6 +3,7 @@ import Icons from "@/components/icons";
 import { buttonVariants } from "./ui/button";
 import { getAuthSession } from "@/lib/auth";
 import UserNav from "./user-nav";
+import SearchBar from "./search-bar";
 
 type Props = {};
 
@@ -16,8 +17,7 @@ export default async function Navbar({}: Props) {
           <span className="text-sm font-medium">Breadit</span>
         </Link>
 
-        {/* TODO: Search Bar */}
-        <div className="w-2xl"></div>
+        <SearchBar />
 
         {session ? (
           <UserNav
