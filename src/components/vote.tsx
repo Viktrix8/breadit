@@ -25,8 +25,7 @@ export default function Vote({ initialVotes, post }: Props) {
       postId: string;
     }[]
   >(initialVotes);
-  const session = useSession();
-
+  const { data: session } = useSession();
   const previousVotes = initialVotes;
 
   const { mutate: submitVote } = useMutation({
@@ -41,21 +40,19 @@ export default function Vote({ initialVotes, post }: Props) {
       return data;
     },
     onMutate: (type: VoteType) => {
-      if (!session.data) return;
+      if (!session) return;
 
-      const userVote = votes.find(
-        (vote) => vote.userId === session.data?.user.id
-      );
+      const userVote = votes.find((vote) => vote.userId === session?.user.id);
 
       if (userVote) {
         if (userVote.type === type) {
           setVotes((prev) =>
-            prev.filter((vote) => vote.userId !== session.data?.user.id)
+            prev.filter((vote) => vote.userId !== session?.user.id)
           );
         } else {
           setVotes((prev) =>
             prev.map((vote) =>
-              vote.userId === session.data?.user.id ? { ...vote, type } : vote
+              vote.userId === session?.user.id ? { ...vote, type } : vote
             )
           );
         }
@@ -64,7 +61,7 @@ export default function Vote({ initialVotes, post }: Props) {
           ...prev,
           {
             type,
-            userId: session.data?.user.id,
+            userId: session?.user.id,
             postId: post.id,
           },
         ]);
@@ -89,7 +86,7 @@ export default function Vote({ initialVotes, post }: Props) {
         }
       }
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast({
         title: "Success",
         description: "Your vote has been submitted.",
@@ -103,8 +100,7 @@ export default function Vote({ initialVotes, post }: Props) {
         onClick={() => submitVote("UP")}
         className={`w-6 h-6 ${
           votes.find(
-            (vote) =>
-              vote.type === "UP" && vote.userId === session.data?.user.id
+            (vote) => vote.type === "UP" && vote.userId === session?.user.id
           ) && "fill-emerald-300"
         }`}
       />
@@ -115,8 +111,7 @@ export default function Vote({ initialVotes, post }: Props) {
         onClick={() => submitVote("DOWN")}
         className={`w-6 h-6 ${
           votes.find(
-            (vote) =>
-              vote.type === "DOWN" && vote.userId === session.data?.user.id
+            (vote) => vote.type === "DOWN" && vote.userId === session?.user.id
           ) && "fill-red-300"
         }`}
       />
