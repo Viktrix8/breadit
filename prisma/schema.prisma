@@ -55,6 +55,7 @@ model User {
   Subscriptions Subscription[]
   Subreddits    Subreddit[]
   Posts         Post[]
+  Votes         Vote[]
 }
 
 model VerificationToken {
@@ -99,4 +100,21 @@ model Post {
   subredditId String
 
   createdAt DateTime @default(now())
+  Votes     Vote[]
+}
+
+enum VoteType {
+  UP
+  DOWN
+}
+
+model Vote {
+  type   VoteType
+  userId String
+  postId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@id([userId, postId])
 }
