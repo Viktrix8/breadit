@@ -7,8 +7,7 @@ import EditorjsOutput from "@/components/editorjs-output";
 import { MessageSquare } from "lucide-react";
 import ShareButton from "@/components/share-button";
 import { getAuthSession } from "@/lib/auth";
-import Avatar from "@/components/avatar";
-import CommentVote from "@/components/comment-vote";
+import Comment from "@/components/comment";
 
 type Props = {
   params: {
@@ -90,31 +89,13 @@ export default async function page({ params: { postId } }: Props) {
               )}
 
               <div className="flex flex-col mt-4 gap-6">
-                {post.Comments.map((comment) => (
-                  <div key={comment.id} className="flex items-center gap-4">
-                    <CommentVote
-                      initialVotes={comment.Votes}
-                      commentId={comment.id}
-                    />
-                    <div className="flex gap-4">
-                      <Avatar
-                        user={{
-                          email: comment.author.email,
-                          image: comment.author.image,
-                        }}
-                      />
-                      <div>
-                        <p className="font-bold text-xs">
-                          {comment.author.username} ·{" "}
-                          <span className="font-normal">
-                            {format(comment.createdAt)}
-                          </span>
-                        </p>
-                        <p className="text-md">{comment.content}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                {post.Comments.length ? (
+                  post.Comments.map((comment) => (
+                    <Comment comment={comment} key={comment.id} />
+                  ))
+                ) : (
+                  <p className="font-medium text-sm">No comments yet.</p>
+                )}
               </div>
             </div>
           </div>
