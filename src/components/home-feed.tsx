@@ -21,6 +21,8 @@ export default async function HomeFeed({}: Props) {
             },
             include: {
               author: true,
+              subreddit: true,
+              Comments: true,
             },
           },
         },

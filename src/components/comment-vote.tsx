@@ -1,42 +1,42 @@
 "use client";
-import { VoteRequest } from "@/types/validators/vote";
-import { Post, User, Vote, VoteType } from "@prisma/client";
+import { CommentVoteRequest } from "@/types/validators/vote";
+import { CommentVote, User, VoteType } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import { ArrowBigUp, ArrowBigDown } from "lucide-react";
+import { ArrowBigDown, ArrowBigUp } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { toast } from "./ui/use-toast";
 
-type ExtendedVote = Vote & {
+type ExtendedCommentVote = CommentVote & {
   user: User;
 };
 
 type Props = {
-  initialVotes: ExtendedVote[];
-  post: Pick<Post, "id">;
+  initialVotes: ExtendedCommentVote[];
+  commentId: string;
 };
 
-export default function Vote({ initialVotes, post }: Props) {
+export default function CommentVote({ initialVotes, commentId }: Props) {
+  const { data: session } = useSession();
   const [votes, setVotes] = useState<
     {
       type: string;
       userId: string;
-      postId: string;
+      commentId: string;
     }[]
   >(initialVotes);
-  const { data: session } = useSession();
   const previousVotes = initialVotes;
 
   const { mutate: submitVote } = useMutation({
     mutationKey: ["vote"],
     mutationFn: async (type: VoteType) => {
-      const payload: VoteRequest = {
+      const payload: CommentVoteRequest = {
         type,
-        postId: post.id,
+        commentId,
       };
 
-      const { data } = await axios.post("/api/post/vote", payload);
+      const { data } = await axios.post("/api/comment/vote", payload);
       return data;
     },
     onMutate: (type: VoteType) => {
@@ -62,7 +62,7 @@ export default function Vote({ initialVotes, post }: Props) {
           {
             type,
             userId: session?.user.id,
-            postId: post.id,
+            commentId,
           },
         ]);
       }

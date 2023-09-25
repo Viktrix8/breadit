@@ -11,7 +11,7 @@ export default function Providers({ children }: Props) {
 
   return (
     <SessionProvider>
-      <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+      <QueryClientProvider client={client}>{children}</QueryClientProvider>
     </SessionProvider>
   );
 }

@@ -1,5 +1,3 @@
-import CommunityFeed from "@/components/community-feed";
-import SmallCreatePost from "@/components/small-create-post";
 import SubscribeToggle from "@/components/subscribe-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { getAuthSession } from "@/lib/auth";
@@ -12,9 +10,10 @@ type Props = {
   params: {
     slug: string;
   };
+  children: React.ReactNode;
 };
 
-export default async function page({ params: { slug } }: Props) {
+export default async function layout({ params: { slug }, children }: Props) {
   const session = await getAuthSession();
 
   const subreddit = await prisma.subreddit.findFirst({
@@ -41,15 +40,7 @@ export default async function page({ params: { slug } }: Props) {
 
   return (
     <div className="grid grid-cols-3 gap-4">
-      <div className="col-span-2">
-        {session && (
-          <SmallCreatePost
-            user={{ image: session.user.image, email: session.user.email }}
-            subredditTitle={subreddit.title}
-          />
-        )}
-        <CommunityFeed subredditId={subreddit.id} />
-      </div>
+      {children}
       <div className="bg-white border h-fit p-4 rounded">
         <p className="flex items-center font-medium">
           <HelpCircle className="mr-2 w-4 h-4" />

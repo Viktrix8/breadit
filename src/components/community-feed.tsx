@@ -15,6 +15,8 @@ export default async function CommunityFeed({ subredditId }: Props) {
     },
     include: {
       author: true,
+      subreddit: true,
+      Comments: true,
     },
     take: 10,
   });

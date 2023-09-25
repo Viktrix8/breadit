@@ -1,9 +1,6 @@
-import { Post as PostType, User } from "@prisma/client";
+import { prisma } from "@/lib/db";
 import Post from "./post";
-
-type ExtendedPost = PostType & {
-  author: User;
-};
+import { ExtendedPost } from "@/types/typing";
 
 type Props = {
   posts: ExtendedPost[];
@@ -12,9 +9,20 @@ type Props = {
 export default function Feed({ posts }: Props) {
   return (
     <div className="flex flex-col gap-4">
-      {posts.length ? (
-        posts.map((post) => <Post key={post.id} post={post} />)
-      ) : (
+      {posts.length &&
+        posts.map(async (post) => {
+          const initialVotes = await prisma.vote.findMany({
+            where: {
+              postId: post.id,
+            },
+            include: {
+              user: true,
+            },
+          });
+
+          return <Post key={post.id} initialVotes={initialVotes} post={post} />;
+        })}
+      {!posts.length && (
         <div className="bg-white border p-4 rounded">
           <p className="text-muted-foreground">There are no posts.</p>
         </div>
