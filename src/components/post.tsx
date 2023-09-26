@@ -25,7 +25,8 @@ export default function Post({ post, initialVotes }: Props) {
       <div className="flex-1">
         <Link href={`/r/${post.subreddit.title}/post/${post.id}`}>
           <p className="text-sm text-muted-foreground">
-            Posted by u/{post.author.username} · {format(post.createdAt)}
+            r/{post.subreddit.title} · Posted by u/
+            {post.author.username} · {format(post.createdAt)}
           </p>
           <p className="text-blue-600 text-lg mb-2">{post.title}</p>
           <EditorjsOutput data={post.content} />
