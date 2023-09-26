@@ -16,7 +16,12 @@ export default function CommentInput({ postId }: Props) {
   const { register, handleSubmit, reset } = useForm();
   const router = useRouter();
 
-  const { mutate: submitComment, isLoading } = useMutation({
+  const {
+    mutate: submitComment,
+    isLoading,
+    isSuccess,
+    isError,
+  } = useMutation({
     mutationFn: async (content: string) => {
       const paylod: CommentCreationRequest = {
         content,
@@ -61,13 +66,13 @@ export default function CommentInput({ postId }: Props) {
         description: "Your comment has been posted",
       });
 
+      reset();
       router.refresh();
     },
   });
 
   const onSubmit = async (data: FieldValues) => {
     submitComment(data.content);
-    reset();
   };
 
   return (

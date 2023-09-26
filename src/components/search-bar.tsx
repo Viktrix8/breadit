@@ -61,6 +61,7 @@ export default function SearchBar({}: Props) {
   return (
     <Command ref={ref} className="w-1/2 shadow-lg relative overflow-visible">
       <CommandInput
+        placeholder="Search communities..."
         value={search}
         onValueChange={(value) => {
           setSearch(value);
