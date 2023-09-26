@@ -33,7 +33,7 @@ export default function Comment({ comment }: Props) {
         />
         <div>
           <p className="font-bold text-xs">
-            {comment.author.username} ·{" "}
+            u/{comment.author.username} ·{" "}
             <span className="font-normal">{format(comment.createdAt)}</span>
           </p>
           <p className="text-md">{comment.content}</p>

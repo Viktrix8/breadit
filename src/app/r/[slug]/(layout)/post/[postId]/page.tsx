@@ -8,6 +8,7 @@ import { MessageSquare } from "lucide-react";
 import ShareButton from "@/components/share-button";
 import { getAuthSession } from "@/lib/auth";
 import Comment from "@/components/comment";
+import CommentInput from "@/components/comment-input";
 
 type Props = {
   params: {
@@ -38,6 +39,9 @@ export default async function page({ params: { postId } }: Props) {
             },
           },
         },
+        orderBy: {
+          createdAt: "desc",
+        },
       },
     },
   });
@@ -50,7 +54,7 @@ export default async function page({ params: { postId } }: Props) {
         <div>
           <Vote post={post} initialVotes={post.Votes} />
         </div>
-        <div>
+        <div className="flex-1">
           <p className="font-semibold text-sm">
             <Link
               href={`/r/${post.subreddit.title}`}
@@ -78,13 +82,13 @@ export default async function page({ params: { postId } }: Props) {
             <div className="mt-6">
               {session && (
                 <div>
-                  <p className="text-xs">
+                  <p className="text-xs mb-2">
                     Comment as{" "}
                     <span className="text-blue-500">
                       {session.user.username}
                     </span>
                   </p>
-                  input
+                  <CommentInput postId={post.id} />
                 </div>
               )}
 

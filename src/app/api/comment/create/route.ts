@@ -1,7 +1,7 @@
 import { getAuthSession } from "@/lib/auth";
-import { PostValidator } from "@/types/validators/post";
-import { prisma } from "@/lib/db";
+import { CommentValidator } from "@/types/validators/comment";
 import { z } from "zod";
+import { prisma } from "@/lib/db";
 
 export const POST = async (req: Request) => {
   const session = await getAuthSession();
@@ -9,32 +9,31 @@ export const POST = async (req: Request) => {
   if (!session) return new Response("Not authorized.", { status: 401 });
   try {
     const body = await req.json();
-    const { subredditName, title, content } = PostValidator.parse(body);
+    const { postId, content } = CommentValidator.parse(body);
 
-    const subreddit = await prisma.subreddit.findFirst({
+    const post = await prisma.post.findFirst({
       where: {
-        title: subredditName,
+        id: postId,
       },
     });
 
-    if (!subreddit)
-      return new Response("Subreddit doesn't exist.", { status: 404 });
+    if (!post) return new Response("Post doesn't exist.", { status: 404 });
 
-    const post = await prisma.post.create({
+    await prisma.comment.create({
       data: {
         content,
-        title,
-        subredditId: subreddit.id,
+        postId: post.id,
         authorId: session.user.id,
       },
     });
 
-    return new Response(post.id, { status: 200 });
+    return new Response("Comment created.", { status: 200 });
   } catch (error) {
     if (error instanceof z.ZodError) {
       const errorMessages = error.errors.map((e) => e.message).join(", ");
       return new Response(errorMessages, { status: 400 });
     }
+
     return new Response("An unexpected error has occurred.", { status: 500 });
   }
 };
