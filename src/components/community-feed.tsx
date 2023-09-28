@@ -1,29 +1,48 @@
-import { prisma } from "@/lib/db";
+"use client"
+import { ExtendedPost } from "@/types/typing";
 import Feed from "./feed";
+import { useQuery} from "@tanstack/react-query";
+import axios from "axios";
+import {useInView} from 'react-intersection-observer'
+import { useEffect, useState } from "react";
 
 type Props = {
   subredditId: string;
 };
 
-export default async function CommunityFeed({ subredditId }: Props) {
-  const posts = await prisma.post.findMany({
-    where: {
-      subredditId: subredditId,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      author: true,
-      subreddit: true,
-      Comments: true,
-    },
-    take: 10,
+export default function CommunityFeed({ subredditId }: Props) {
+  const [pageParam, setPageParam] = useState(0)
+  const [allPosts, setAllPosts] = useState<ExtendedPost[]>([]);
+  const { ref, inView } = useInView({
+    threshold: 0,
   });
+
+  const {isSuccess, isFetching} = useQuery({
+    queryFn: async () => {
+      const {data} = await axios.get('/api/post', {
+        params: {
+          subredditId,
+          pageParam
+        }
+      })
+      return data as ExtendedPost[]
+    },
+    queryKey: ['posts', subredditId, pageParam],
+    onSuccess: (newData) => {
+      setAllPosts(prevPosts => [...prevPosts, ...newData]); 
+    }
+  })
+
+  useEffect(() => {
+    if (inView && isSuccess && !isFetching) {
+      setPageParam(prev => prev + 1)
+    }
+  }, [inView, isSuccess, isFetching])
 
   return (
     <div className="mt-4">
-      <Feed posts={posts} />
+      <Feed posts={allPosts} />
+      <div ref={ref} />
     </div>
   );
 }

@@ -1,15 +1,11 @@
-import { Post, User, Vote as VoteType } from "@prisma/client";
+import { Post } from "@prisma/client";
 import { format } from "timeago.js";
 import EditorjsOutput from "./editorjs-output";
 import Vote from "./vote";
 import Link from "next/link";
 import { MessageSquare } from "lucide-react";
 import ShareButton from "./share-button";
-import { ExtendedPost } from "@/types/typing";
-
-type ExtendedVote = VoteType & {
-  user: User;
-};
+import { ExtendedPost, ExtendedVote } from "@/types/typing";
 
 type Props = {
   post: ExtendedPost;

@@ -23,6 +23,11 @@ export default async function HomeFeed({}: Props) {
               author: true,
               subreddit: true,
               Comments: true,
+              Votes: {
+                include: {
+                  user: true,
+                }
+              }
             },
           },
         },

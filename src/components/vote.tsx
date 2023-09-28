@@ -1,16 +1,14 @@
 "use client";
 import { VoteRequest } from "@/types/validators/vote";
-import { Post, User, Vote, VoteType } from "@prisma/client";
+import { Post,  Vote, VoteType } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import { ArrowBigUp, ArrowBigDown } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { toast } from "./ui/use-toast";
+import { ExtendedVote } from "@/types/typing";
 
-type ExtendedVote = Vote & {
-  user: User;
-};
 
 type Props = {
   initialVotes: ExtendedVote[];
