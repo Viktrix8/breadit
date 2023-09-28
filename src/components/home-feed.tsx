@@ -1,43 +1,44 @@
-import { prisma } from "@/lib/db";
+"use client"
+import { ExtendedPost } from "@/types/typing";
 import Feed from "./feed";
-import { getAuthSession } from "@/lib/auth";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useInView } from 'react-intersection-observer'
+import { useEffect, useState } from "react";
 
 type Props = {};
 
-export default async function HomeFeed({}: Props) {
-  const session = await getAuthSession();
-
-  const postsFromSubscribedSubreddits = await prisma.subscription.findMany({
-    where: {
-      userId: session?.user.id,
-    },
-    take: 10,
-    select: {
-      subreddit: {
-        select: {
-          Posts: {
-            orderBy: {
-              createdAt: "desc",
-            },
-            include: {
-              author: true,
-              subreddit: true,
-              Comments: true,
-              Votes: {
-                include: {
-                  user: true,
-                }
-              }
-            },
-          },
-        },
-      },
-    },
+export default function HomeFeed({ }: Props) {
+  const [pageParam, setPageParam] = useState(0)
+  const [allPosts, setAllPosts] = useState<ExtendedPost[]>([]);
+  const { ref, inView } = useInView({
+    threshold: 0,
   });
 
-  const flattenedPosts = postsFromSubscribedSubreddits
-    .flatMap((subscription) => subscription.subreddit.Posts)
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  const { isSuccess, isFetching } = useQuery({
+    queryFn: async () => {
+      const { data } = await axios.get('/api/post', {
+        params: {
+          pageParam
+        }
+      })
+      console.log(data)
+      return data as ExtendedPost[]
+    },
+    queryKey: ['posts', pageParam],
+    onSuccess: (newData) => {
+      setAllPosts(prevPosts => [...prevPosts, ...newData]);
+    }
+  })
 
-  return <Feed posts={flattenedPosts} />;
+  useEffect(() => {
+    if (inView && isSuccess && !isFetching) {
+      setPageParam(prev => prev + 1)
+    }
+  }, [inView, isSuccess, isFetching])
+
+  return <div>
+    <Feed posts={allPosts} />
+    <div ref={ref} />
+  </div>
 }
