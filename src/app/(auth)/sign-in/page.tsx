@@ -4,7 +4,7 @@ import Link from "next/link";
 
 type Props = {};
 
-export default function page({}: Props) {
+export default function page({ }: Props) {
   return (
     <div className="items-center py-64">
       <div className="bg-white text-center w-fit mx-auto p-6 rounded">
@@ -15,7 +15,7 @@ export default function page({}: Props) {
         <SignIn />
         <hr className="my-4" />
         <span className="text-sm text-muted-foreground">
-          Don't have an account yet?
+          Don&apos;t have an account yet?
           <Link href="/sign-up" className={buttonVariants({ variant: "link" })}>
             Sign Up
           </Link>

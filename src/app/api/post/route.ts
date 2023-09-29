@@ -18,6 +18,8 @@ export const GET = async (req: NextRequest) => {
 
         if (!subredditId) {
             const session = await getAuthSession();
+
+            if (!session) return new Response(JSON.stringify([]), { status: 200 })
             const postsFromSubscribedSubreddits = await prisma.subscription.findMany({
                 where: {
                     userId: session?.user.id,

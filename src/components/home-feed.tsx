@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useInView } from 'react-intersection-observer'
 import { useEffect, useState } from "react";
+import { toast } from "./ui/use-toast";
 
 type Props = {};
 
@@ -28,6 +29,13 @@ export default function HomeFeed({ }: Props) {
     queryKey: ['posts', pageParam],
     onSuccess: (newData) => {
       setAllPosts(prevPosts => [...prevPosts, ...newData]);
+    },
+    onError: () => {
+      toast({
+        title: "Oops!",
+        description: "Couldn't fetch posts, please try again.",
+        variant: "destructive"
+      })
     }
   })
 

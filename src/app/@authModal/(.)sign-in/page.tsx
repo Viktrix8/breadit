@@ -4,7 +4,7 @@ import Link from "next/link";
 
 type Props = {};
 
-export default function SignIn({}: Props) {
+export default function SignIn({ }: Props) {
   return (
     <>
       <div className="fixed inset-0 bg-gray-400 bg-opacity-75 transition-opacity"></div>
@@ -19,7 +19,7 @@ export default function SignIn({}: Props) {
             <SignInButton />
             <hr className="my-4" />
             <span className="text-sm text-muted-foreground">
-              Don't have an account yet?
+              Don&apos;t have an account yet?
               <Link
                 href="/sign-up"
                 className={buttonVariants({ variant: "link" })}
