@@ -23,7 +23,6 @@ export default function HomeFeed({ }: Props) {
           pageParam
         }
       })
-      console.log(data)
       return data as ExtendedPost[]
     },
     queryKey: ['posts', pageParam],
