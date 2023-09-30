@@ -30,7 +30,7 @@ export default function ShareButton({ url }: Props) {
           </DialogDescription>
         </DialogHeader>
         <div>
-          <Input defaultValue={process.env.NEXTAUTH_URL + url} />
+          <Input defaultValue={process.env.NEXT_PUBLIC_URL + url} />
         </div>
       </DialogContent>
     </Dialog>
